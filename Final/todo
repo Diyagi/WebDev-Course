@@ -1,6 +1,6 @@
 Find a way to wait for modal hide before restoring button.
-Move users edit and add to a single form component.
-Make app-view height fit content
 Check for JWT token in login screen and skip if its valid.
-Extract some of the common used functions into components
-Create some sort of loading overlay to show while fetching lists from db
+Add finalize quote button in the quote view.
+Center Action header in some of the tables.
+Add search feature for all tables.
+Add pagination.
