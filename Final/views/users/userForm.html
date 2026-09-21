@@ -1,105 +1,92 @@
 <section class="form-page">
-    <div class="form-page-header">
-        <p class="view-kicker">Administração</p>
-        <h2 class="view-title">Usuário</h2>
-        <p class="form-record-id" id="userId"></p>
+  <div class="form-page-header">
+    <p class="view-kicker">Administração</p>
+    <h2 class="view-title">Usuário</h2>
+    <p class="form-record-id" id="userId"></p>
+  </div>
+  <form id="userForm" class="form-card" novalidate>
+    <!-- Email -->
+    <div class="mb-3">
+      <label for="email" class="form-label">Email</label>
+      <input
+        type="email"
+        class="form-control"
+        id="email"
+        name="email"
+        required
+      />
     </div>
-    <form id="userForm" class="form-card" novalidate>
-        <!-- Email -->
-        <div class="mb-3">
-            <label for="email" class="form-label">Email</label>
-            <input
-                type="email"
-                class="form-control"
-                id="email"
-                name="email"
-                required
-            >
-        </div>
 
-        <!-- Username -->
-        <div class="mb-3">
-            <label for="username" class="form-label">Usuário</label>
-            <input
-                type="text"
-                class="form-control"
-                id="username"
-                name="username"
-                required
-            >
-        </div>
+    <!-- Username -->
+    <div class="mb-3">
+      <label for="username" class="form-label">Usuário</label>
+      <input
+        type="text"
+        class="form-control"
+        id="username"
+        name="username"
+        required
+      />
+    </div>
 
-        <!-- Full Name -->
-        <div class="mb-3">
-            <label for="fullName" class="form-label">Nome</label>
-            <input
-                type="text"
-                class="form-control"
-                id="fullName"
-                name="fullName"
-                required
-            >
-        </div>
+    <!-- Full Name -->
+    <div class="mb-3">
+      <label for="fullName" class="form-label">Nome</label>
+      <input
+        type="text"
+        class="form-control"
+        id="fullName"
+        name="fullName"
+        required
+      />
+    </div>
 
-        <!-- Password -->
-        <div class="mb-3">
-            <label for="password" class="form-label">
-                Senha
-            </label>
+    <!-- Password -->
+    <div class="mb-3">
+      <label for="password" class="form-label"> Senha </label>
 
-            <input
-                type="password"
-                class="form-control"
-                id="password"
-                name="password"
-                placeholder="Digite a senha"
-                required
-            >
-        </div>
+      <input
+        type="password"
+        class="form-control"
+        id="password"
+        name="password"
+        placeholder="Digite a senha"
+        required
+      />
+    </div>
 
-        <!-- Password Confirm -->
-        <div class="mb-3">
-            <label for="passwordConfirm" class="form-label">
-                Confirmar Senha
-            </label>
+    <!-- Password Confirm -->
+    <div class="mb-3">
+      <label for="passwordConfirm" class="form-label"> Confirmar Senha </label>
 
-            <input
-                type="password"
-                class="form-control"
-                id="passwordConfirm"
-                name="passwordConfirm"
-                placeholder="Digite a senha novamente"
-            >
-        </div>
+      <input
+        type="password"
+        class="form-control"
+        id="passwordConfirm"
+        name="passwordConfirm"
+        placeholder="Digite a senha novamente"
+      />
+    </div>
 
-        <!-- Role -->
-        <div class="mb-4">
-            <label for="userRole" class="form-label">Função</label>
+    <!-- Role -->
+    <div class="mb-4">
+      <label for="userRole" class="form-label">Função</label>
 
-            <select
-                class="form-select"
-                id="userRole"
-                name="userRole"
-            >
-            </select>
-        </div>
+      <select class="form-select" id="userRole" name="userRole"></select>
+    </div>
 
-        <div id="formMessage"></div>
+    <div id="formMessage"></div>
 
-        <!-- Actions -->
-        <div class="d-flex gap-2">
-            <button type="submit" class="btn btn-primary">
-                <i class="bi bi-person-plus"></i>
-                Criar Usuário
-            </button>
+    <!-- Actions -->
+    <div class="d-flex gap-2">
+      <button type="submit" class="btn btn-primary">
+        <i class="bi bi-person-plus"></i>
+        Criar Usuário
+      </button>
 
-            <button
-                type="button"
-                class="btn btn-secondary"
-                onclick="history.back()"
-            >
-                Cancelar
-            </button>
-        </div>
-    </form>
+      <button type="button" class="btn btn-secondary" onclick="history.back()">
+        Cancelar
+      </button>
+    </div>
+  </form>
 </section>

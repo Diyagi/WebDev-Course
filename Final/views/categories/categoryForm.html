@@ -1,39 +1,35 @@
 <section class="form-page">
-    <div class="form-page-header">
-        <p class="view-kicker">Cadastros</p>
-        <h2 class="view-title">Categoria</h2>
-        <p class="form-record-id" id="categoryId"></p>
+  <div class="form-page-header">
+    <p class="view-kicker">Cadastros</p>
+    <h2 class="view-title">Categoria</h2>
+    <p class="form-record-id" id="categoryId"></p>
+  </div>
+
+  <form id="categoryForm" class="form-card" novalidate>
+    <!-- Description -->
+    <div class="mb-3">
+      <label for="categoryDesc" class="form-label">Descrição</label>
+      <input
+        type="text"
+        class="form-control"
+        id="categoryDesc"
+        name="categoryDesc"
+        required
+      />
     </div>
 
-    <form id="categoryForm" class="form-card" novalidate>
-        <!-- Description -->
-        <div class="mb-3">
-            <label for="categoryDesc" class="form-label">Descrição</label>
-            <input
-                type="text"
-                class="form-control"
-                id="categoryDesc"
-                name="categoryDesc"
-                required
-            >
-        </div>
+    <div id="formMessage"></div>
 
-        <div id="formMessage"></div>
+    <!-- Actions -->
+    <div class="d-flex gap-2">
+      <button type="submit" class="btn btn-primary">
+        <i class="bi bi-check-lg"></i>
+        Salvar Alterações
+      </button>
 
-        <!-- Actions -->
-        <div class="d-flex gap-2">
-            <button type="submit" class="btn btn-primary">
-                <i class="bi bi-check-lg"></i>
-                Salvar Alterações
-            </button>
-
-            <button
-                type="button"
-                class="btn btn-secondary"
-                onclick="history.back()"
-            >
-                Cancelar
-            </button>
-        </div>
-    </form>
+      <button type="button" class="btn btn-secondary" onclick="history.back()">
+        Cancelar
+      </button>
+    </div>
+  </form>
 </section>

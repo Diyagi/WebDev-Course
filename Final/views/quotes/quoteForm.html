@@ -1,64 +1,119 @@
 <section class="form-page quote-form-page">
-    <div class="form-page-header">
-        <p class="view-kicker">Vendas</p>
-        <h2 class="view-title">Orçamento</h2>
-        <p class="text-muted mb-0" id="quoteId"></p>
+  <div class="form-page-header">
+    <p class="view-kicker">Vendas</p>
+    <h2 class="view-title">Orçamento</h2>
+    <p class="text-muted mb-0" id="quoteId"></p>
+  </div>
+
+  <form id="quoteForm" class="form-card" novalidate>
+    <div class="row g-3">
+      <div class="col-md-6">
+        <label for="quoteClientPicker" class="form-label">Cliente</label>
+        <button
+          type="button"
+          class="form-select text-start quote-picker-trigger"
+          id="quoteClientPicker"
+        >
+          <span id="quoteClientLabel" class="text-muted"
+            >Selecione um cliente</span
+          >
+        </button>
+        <input type="hidden" id="quoteClient" />
+      </div>
+      <div class="col-md-6">
+        <label for="quoteSellerPicker" class="form-label">Vendedor</label>
+        <button
+          type="button"
+          class="form-select text-start quote-picker-trigger"
+          id="quoteSellerPicker"
+        >
+          <span id="quoteSellerLabel" class="text-muted"
+            >Selecione um vendedor</span
+          >
+        </button>
+        <input type="hidden" id="quoteSeller" />
+        <div class="form-text" id="quoteSellerHelp"></div>
+      </div>
+      <div class="col-md-6">
+        <label for="quoteValidity" class="form-label">Validade (dias)</label>
+        <input
+          type="number"
+          min="1"
+          step="1"
+          class="form-control"
+          id="quoteValidity"
+          value="15"
+          required
+        />
+      </div>
+      <div class="col-md-6">
+        <span class="form-label d-block">Situação</span>
+        <div class="form-check form-switch pt-2">
+          <input
+            class="form-check-input"
+            type="checkbox"
+            role="switch"
+            id="quoteFinalized"
+          />
+          <label class="form-check-label" for="quoteFinalized"
+            >Orçamento finalizado</label
+          >
+        </div>
+        <div class="form-text" id="quoteFinalizedHelp">
+          A data será registrada automaticamente ao salvar.
+        </div>
+      </div>
     </div>
 
-    <form id="quoteForm" class="form-card" novalidate>
-        <div class="row g-3">
-            <div class="col-md-6">
-                <label for="quoteClientPicker" class="form-label">Cliente</label>
-                <button type="button" class="form-select text-start quote-picker-trigger" id="quoteClientPicker">
-                    <span id="quoteClientLabel" class="text-muted">Selecione um cliente</span>
-                </button>
-                <input type="hidden" id="quoteClient">
-            </div>
-            <div class="col-md-6">
-                <label for="quoteSellerPicker" class="form-label">Vendedor</label>
-                <button type="button" class="form-select text-start quote-picker-trigger" id="quoteSellerPicker">
-                    <span id="quoteSellerLabel" class="text-muted">Selecione um vendedor</span>
-                </button>
-                <input type="hidden" id="quoteSeller">
-                <div class="form-text" id="quoteSellerHelp"></div>
-            </div>
-            <div class="col-md-6">
-                <label for="quoteValidity" class="form-label">Validade (dias)</label>
-                <input type="number" min="1" step="1" class="form-control" id="quoteValidity" value="15" required>
-            </div>
-            <div class="col-md-6">
-                <span class="form-label d-block">Situação</span>
-                <div class="form-check form-switch pt-2">
-                    <input class="form-check-input" type="checkbox" role="switch" id="quoteFinalized">
-                    <label class="form-check-label" for="quoteFinalized">Orçamento finalizado</label>
-                </div>
-                <div class="form-text" id="quoteFinalizedHelp">A data será registrada automaticamente ao salvar.</div>
-            </div>
-        </div>
+    <div class="quote-items-header mt-4 mb-3">
+      <div>
+        <h3 class="h5 mb-1">Produtos</h3>
+        <p class="small text-muted mb-0">
+          Adicione produtos e ajuste quantidade, descrição ou valor para esta
+          proposta.
+        </p>
+      </div>
+      <button
+        type="button"
+        class="btn btn-outline-primary"
+        id="addQuoteProduct"
+      >
+        <i class="bi bi-plus-lg"></i> Adicionar produto
+      </button>
+    </div>
 
-        <div class="quote-items-header mt-4 mb-3">
-            <div>
-                <h3 class="h5 mb-1">Produtos</h3>
-                <p class="small text-muted mb-0">Adicione produtos e ajuste quantidade, descrição ou valor para esta proposta.</p>
-            </div>
-            <button type="button" class="btn btn-outline-primary" id="addQuoteProduct">
-                <i class="bi bi-plus-lg"></i> Adicionar produto
-            </button>
-        </div>
+    <div class="table-responsive view-card quote-items-table">
+      <table class="table align-middle">
+        <thead>
+          <tr>
+            <th>Produto</th>
+            <th>Descrição</th>
+            <th>Qtd.</th>
+            <th>Valor unit.</th>
+            <th class="text-end">Total</th>
+            <th><span class="visually-hidden">Ações</span></th>
+          </tr>
+        </thead>
+        <tbody id="quoteItemsBody"></tbody>
+        <tfoot>
+          <tr>
+            <th colspan="4" class="text-end">Valor total</th>
+            <th class="text-end" id="quoteTotal">R$ 0,00</th>
+            <th></th>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+    <div class="invalid-feedback d-block" id="quoteItemsError"></div>
+    <div id="formMessage" class="mt-3"></div>
 
-        <div class="table-responsive view-card quote-items-table">
-            <table class="table align-middle">
-                <thead><tr><th>Produto</th><th>Descrição</th><th>Qtd.</th><th>Valor unit.</th><th class="text-end">Total</th><th><span class="visually-hidden">Ações</span></th></tr></thead>
-                <tbody id="quoteItemsBody"></tbody>
-                <tfoot><tr><th colspan="4" class="text-end">Valor total</th><th class="text-end" id="quoteTotal">R$ 0,00</th><th></th></tr></tfoot>
-            </table>
-        </div>
-        <div class="invalid-feedback d-block" id="quoteItemsError"></div>
-        <div id="formMessage" class="mt-3"></div>
-
-        <div class="d-flex flex-wrap gap-2 mt-4">
-            <button type="submit" class="btn btn-primary"><i class="bi bi-check-lg"></i> Salvar Orçamento</button>
-            <button type="button" class="btn btn-secondary" onclick="history.back()">Cancelar</button>
-        </div>
-    </form>
+    <div class="d-flex flex-wrap gap-2 mt-4">
+      <button type="submit" class="btn btn-primary">
+        <i class="bi bi-check-lg"></i> Salvar Orçamento
+      </button>
+      <button type="button" class="btn btn-secondary" onclick="history.back()">
+        Cancelar
+      </button>
+    </div>
+  </form>
 </section>

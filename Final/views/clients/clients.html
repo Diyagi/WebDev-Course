@@ -1,33 +1,42 @@
 <section class="view-page">
-    <div class="view-toolbar">
-        <p class="view-subtitle">Mantenha os dados de contato atualizados.</p>
-        <button class="btn btn-primary" onclick="window.location.href='/menu/clients/add';">
-            <i class="bi bi-plus-lg"></i>
-            Novo Cliente
-        </button>
-    </div>
+  <div class="view-toolbar">
+    <p class="view-subtitle">Mantenha os dados de contato atualizados.</p>
+    <button
+      class="btn btn-primary"
+      onclick="window.location.href = '/menu/clients/add'"
+    >
+      <i class="bi bi-plus-lg"></i>
+      Novo Cliente
+    </button>
+  </div>
 
-    <div class="list-filters mb-3" role="search" aria-label="Filtros de clientes">
-        <div class="list-search">
-            <input id="clientSearch" type="search" class="form-control" placeholder="ID, nome, CPF/CNPJ, telefone, e-mail ou endereço" aria-controls="clientTableBody">
-        </div>
+  <div class="list-filters mb-3" role="search" aria-label="Filtros de clientes">
+    <div class="list-search">
+      <input
+        id="clientSearch"
+        type="search"
+        class="form-control"
+        placeholder="ID, nome, CPF/CNPJ, telefone, e-mail"
+        aria-controls="clientTableBody"
+      />
     </div>
+  </div>
 
-    <div class="table-responsive view-card table-actions-card">
-        <table class="table table-striped table-hover align-middle">
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Nome</th>
-                    <th>CPF/CNPJ</th>
-                    <th>Tipo</th>
-                    <th>Telefone</th>
-                    <th>Email</th>
-                    <th>Endereço</th>
-                    <th class="text-end">Ações</th>
-                </tr>
-            </thead>
-            <tbody id="clientTableBody"></tbody>
-        </table>
-    </div>
+  <div class="table-responsive view-card table-actions-card">
+    <table class="table table-striped table-hover align-middle">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Nome</th>
+          <th>CPF/CNPJ</th>
+          <th>Tipo</th>
+          <th>Telefone</th>
+          <th>Email</th>
+          <th>Endereço</th>
+          <th class="text-end">Ações</th>
+        </tr>
+      </thead>
+      <tbody id="clientTableBody"></tbody>
+    </table>
+  </div>
 </section>

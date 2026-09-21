@@ -6,7 +6,7 @@ create table quote(
     validity_days int not null,
     finalized_at timestamptz,
     total_value decimal(15,2) not null
-)
+);
 
 create table product_quote(
     id serial primary key,
@@ -16,4 +16,4 @@ create table product_quote(
     amount int not null,
     product_value decimal(15,2) not null,
     total_value decimal(15,2) not null
-)
+);

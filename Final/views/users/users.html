@@ -1,26 +1,28 @@
 <section class="view-page">
-    <div class="view-toolbar">
-        <p class="view-subtitle">Gerencie acessos e permissões da equipe.</p>
-        <button class="btn btn-primary" onclick="window.location.href='/menu/users/add';">
-            <i class="bi bi-plus-lg"></i>
-            Novo Usuário
-        </button>
-    </div>
+  <div class="view-toolbar">
+    <p class="view-subtitle">Gerencie acessos e permissões da equipe.</p>
+    <button
+      class="btn btn-primary"
+      onclick="window.location.href = '/menu/users/add'"
+    >
+      <i class="bi bi-plus-lg"></i>
+      Novo Usuário
+    </button>
+  </div>
 
-    <div class="table-responsive view-card table-actions-card">
-        <table class="table table-striped table-hover align-middle">
-            <thead>
-                <tr>
-                    <th>Email</th>
-                    <th>Username</th>
-                    <th>Nome</th>
-                    <th>Função</th>
-                    <th class="text-end">Ações</th>
-                </tr>
-            </thead>
+  <div class="table-responsive view-card table-actions-card">
+    <table class="table table-striped table-hover align-middle">
+      <thead>
+        <tr>
+          <th>Email</th>
+          <th>Username</th>
+          <th>Nome</th>
+          <th>Função</th>
+          <th class="text-end">Ações</th>
+        </tr>
+      </thead>
 
-            <tbody id="usersTableBody">
-            </tbody>
-        </table>
-    </div>
+      <tbody id="usersTableBody"></tbody>
+    </table>
+  </div>
 </section>

@@ -2,56 +2,73 @@ import { supabase } from "./supaCliente.js";
 import { applySearch, textSearchFilter } from "./search.js";
 import { readPage } from "./pagination.js";
 
+// Fetches the list of products.
 export async function getProducts(search = "", options = {}) {
-    const term = search.trim();
-    const sort = { ...(options.sort ?? { key: "id", direction: "asc" }) };
-    if (!["id", "description", "price", "category"].includes(sort.key)) throw new Error("Ordenação inválida.");
-    if (sort.key === "category") sort.related = { relation: "category", column: "description" };
-    return readPage(() => {
-        let query = supabase
+  const term = search.trim();
+  const sort = { ...(options.sort ?? { key: "id", direction: "asc" }) };
+  if (!["id", "description", "price", "category"].includes(sort.key))
+    throw new Error("Ordenação inválida.");
+  if (sort.key === "category")
+    sort.related = { relation: "category", column: "description" };
+  return readPage(
+    () => {
+      let query = supabase
         .from("product")
-        .select("id, description, price, status, observation, created_at, category:categoryid(id, description)"
-            + (term ? ",search_category:categoryid()" : "")
-            + (sort.related ? ",cursor_after:categoryid(),cursor_equal:categoryid(),cursor_present:categoryid()" : ""));
-        if (term) query = query.or(textSearchFilter(["description"], term), { referencedTable: "search_category" });
-        if (options.activeOnly) query = query.or("status.ilike.active,status.ilike.ativo");
-        if (options.excludeIds?.length) {
-            const ids = options.excludeIds.map(Number);
-            if (!ids.every((id) => Number.isSafeInteger(id) && id > 0)) throw new Error("ID inválido.");
-            query = query.not("id", "in", `(${ids.join(",")})`);
-        }
-        return applySearch(query, term, ["description", "observation"], ["search_category.not.is.null"]);
-    }, { ...options, sort });
+        .select(
+          "id, description, price, status, observation, created_at, category:categoryid(id, description)" +
+            (term ? ",search_category:categoryid()" : "") +
+            (sort.related
+              ? ",cursor_after:categoryid(),cursor_equal:categoryid(),cursor_present:categoryid()"
+              : ""),
+        );
+      if (term)
+        query = query.or(textSearchFilter(["description"], term), {
+          referencedTable: "search_category",
+        });
+      if (options.activeOnly)
+        query = query.or("status.ilike.active,status.ilike.ativo");
+      if (options.excludeIds?.length) {
+        const ids = options.excludeIds.map(Number);
+        if (!ids.every((id) => Number.isSafeInteger(id) && id > 0))
+          throw new Error("ID inválido.");
+        query = query.not("id", "in", `(${ids.join(",")})`);
+      }
+      return applySearch(
+        query,
+        term,
+        ["description", "observation"],
+        ["search_category.not.is.null"],
+      );
+    },
+    { ...options, sort },
+  );
 }
 
+// Fetches the product details by ID.
 export async function getProduct(productId) {
-    return await supabase
-        .from("product")
-        .select("*, category:categoryid(id, description)")
-        .eq("id", productId)
-        .single();
+  return await supabase
+    .from("product")
+    .select("*, category:categoryid(id, description)")
+    .eq("id", productId)
+    .single();
 }
 
+// Creates a new product.
 export async function createProduct(data) {
-    return await supabase
-        .from("product")
-        .insert(data)
-        .select()
-        .single();
+  return await supabase.from("product").insert(data).select().single();
 }
 
+// Updates the product details.
 export async function updateProduct(productId, data) {
-    return await supabase
-        .from("product")
-        .update(data)
-        .eq("id", productId)
-        .select()
-        .single();
+  return await supabase
+    .from("product")
+    .update(data)
+    .eq("id", productId)
+    .select()
+    .single();
 }
 
+// Deletes the specified product.
 export async function deleteProduct(productId) {
-    return await supabase
-        .from("product")
-        .delete()
-        .eq("id", productId);
+  return await supabase.from("product").delete().eq("id", productId);
 }

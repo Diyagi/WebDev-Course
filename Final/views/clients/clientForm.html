@@ -1,52 +1,77 @@
 <section class="form-page">
-    <div class="form-page-header">
-        <p class="view-kicker">Cadastros</p>
-        <h2 class="view-title">Cliente</h2>
-        <p class="text-muted mb-0" id="clientId"></p>
+  <div class="form-page-header">
+    <p class="view-kicker">Cadastros</p>
+    <h2 class="view-title">Cliente</h2>
+    <p class="text-muted mb-0" id="clientId"></p>
+  </div>
+
+  <form id="clientForm" class="form-card" novalidate>
+    <div class="mb-3">
+      <label for="clientName" class="form-label">Nome</label>
+      <input type="text" class="form-control" id="clientName" required />
     </div>
 
-    <form id="clientForm" class="form-card" novalidate>
-        <div class="mb-3">
-            <label for="clientName" class="form-label">Nome</label>
-            <input type="text" class="form-control" id="clientName" required>
-        </div>
+    <div class="mb-3">
+      <label for="clientType" class="form-label">Tipo de cliente</label>
+      <select class="form-select" id="clientType" required>
+        <option value="" selected disabled>Selecione o tipo</option>
+        <option value="PF">Pessoa Física</option>
+        <option value="PJ">Pessoa Jurídica</option>
+      </select>
+    </div>
 
-        <div class="mb-3">
-            <label for="clientType" class="form-label">Tipo de cliente</label>
-            <select class="form-select" id="clientType" required>
-                <option value="" selected disabled>Selecione o tipo</option>
-                <option value="PF">Pessoa Física</option>
-                <option value="PJ">Pessoa Jurídica</option>
-            </select>
-        </div>
+    <div class="mb-3">
+      <label for="clientDocument" class="form-label">CPF/CNPJ</label>
+      <input
+        type="text"
+        class="form-control"
+        id="clientDocument"
+        inputmode="numeric"
+        autocomplete="off"
+        required
+      />
+    </div>
 
-        <div class="mb-3">
-            <label for="clientDocument" class="form-label">CPF/CNPJ</label>
-            <input type="text" class="form-control" id="clientDocument" inputmode="numeric" autocomplete="off" required>
-        </div>
+    <div class="mb-3">
+      <label for="clientPhone" class="form-label">Telefone</label>
+      <input
+        type="text"
+        class="form-control"
+        id="clientPhone"
+        inputmode="tel"
+        autocomplete="tel"
+      />
+    </div>
 
-        <div class="mb-3">
-            <label for="clientPhone" class="form-label">Telefone</label>
-            <input type="text" class="form-control" id="clientPhone" inputmode="tel" autocomplete="tel">
-        </div>
+    <div class="mb-3">
+      <label for="clientEmail" class="form-label">Email</label>
+      <input
+        type="email"
+        class="form-control"
+        id="clientEmail"
+        autocomplete="email"
+      />
+    </div>
 
-        <div class="mb-3">
-            <label for="clientEmail" class="form-label">Email</label>
-            <input type="email" class="form-control" id="clientEmail" autocomplete="email">
-        </div>
+    <div class="mb-3">
+      <label for="clientAddress" class="form-label">Endereço</label>
+      <textarea
+        class="form-control"
+        id="clientAddress"
+        rows="3"
+        autocomplete="street-address"
+      ></textarea>
+    </div>
 
-        <div class="mb-3">
-            <label for="clientAddress" class="form-label">Endereço</label>
-            <textarea class="form-control" id="clientAddress" rows="3" autocomplete="street-address"></textarea>
-        </div>
+    <div id="formMessage"></div>
 
-        <div id="formMessage"></div>
-
-        <div class="d-flex gap-2">
-            <button type="submit" class="btn btn-primary">
-                <i class="bi bi-check-lg"></i> Salvar Cliente
-            </button>
-            <button type="button" class="btn btn-secondary" onclick="history.back()">Cancelar</button>
-        </div>
-    </form>
+    <div class="d-flex gap-2">
+      <button type="submit" class="btn btn-primary">
+        <i class="bi bi-check-lg"></i> Salvar Cliente
+      </button>
+      <button type="button" class="btn btn-secondary" onclick="history.back()">
+        Cancelar
+      </button>
+    </div>
+  </form>
 </section>

@@ -1,35 +1,73 @@
 <section class="view-page quote-page">
-    <div class="view-toolbar">
-        <p class="view-subtitle">Consulte propostas e abra um orçamento para ver todos os produtos.</p>
-        <button class="btn btn-primary" onclick="window.location.href='/menu/quotes/add';">
-            <i class="bi bi-plus-lg"></i> Novo Orçamento
-        </button>
-    </div>
+  <div class="view-toolbar">
+    <p class="view-subtitle">
+      Consulte propostas e abra um orçamento para ver todos os produtos.
+    </p>
+    <button
+      class="btn btn-primary"
+      onclick="window.location.href = '/menu/quotes/add'"
+    >
+      <i class="bi bi-plus-lg"></i> Novo Orçamento
+    </button>
+  </div>
 
-    <div class="quote-filters list-filters mb-3" role="search" aria-label="Filtros de orçamento">
-        <div class="list-search">
-            <input id="quoteSearch" type="search" class="form-control" placeholder="ID, nome do cliente ou vendedor" aria-controls="quoteTableBody">
-        </div>
-        <div class="form-check form-switch">
-            <input class="form-check-input" type="checkbox" role="switch" id="showExpiredQuotes">
-            <label class="form-check-label" for="showExpiredQuotes">Mostrar vencidos</label>
-        </div>
-        <div class="form-check form-switch">
-            <input class="form-check-input" type="checkbox" role="switch" id="showFinalizedQuotes">
-            <label class="form-check-label" for="showFinalizedQuotes">Mostrar finalizados</label>
-        </div>
+  <div
+    class="quote-filters list-filters mb-3"
+    role="search"
+    aria-label="Filtros de orçamento"
+  >
+    <div class="list-search">
+      <input
+        id="quoteSearch"
+        type="search"
+        class="form-control"
+        placeholder="ID, nome do cliente ou vendedor"
+        aria-controls="quoteTableBody"
+      />
     </div>
+    <div class="form-check form-switch">
+      <input
+        class="form-check-input"
+        type="checkbox"
+        role="switch"
+        id="showExpiredQuotes"
+      />
+      <label class="form-check-label" for="showExpiredQuotes"
+        >Mostrar vencidos</label
+      >
+    </div>
+    <div class="form-check form-switch">
+      <input
+        class="form-check-input"
+        type="checkbox"
+        role="switch"
+        id="showFinalizedQuotes"
+      />
+      <label class="form-check-label" for="showFinalizedQuotes"
+        >Mostrar finalizados</label
+      >
+    </div>
+  </div>
 
-    <div class="table-responsive view-card">
-        <table class="table table-striped table-hover align-middle quote-table">
-            <thead>
-                <tr>
-                    <th>ID</th><th>Cliente</th><th>Vendedor</th><th>Criado em</th><th>Validade</th>
-                    <th>Finalizado em</th><th class="text-end">Valor total</th><th class="text-end">Ações</th>
-                </tr>
-            </thead>
-            <tbody id="quoteTableBody"></tbody>
-        </table>
-    </div>
-    <p class="small text-muted mt-2 mb-0"><i class="bi bi-info-circle"></i> Clique em uma linha para visualizar o orçamento completo.</p>
+  <div class="table-responsive view-card">
+    <table class="table table-striped table-hover align-middle quote-table">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Cliente</th>
+          <th>Vendedor</th>
+          <th>Criado em</th>
+          <th>Validade</th>
+          <th>Finalizado em</th>
+          <th class="text-end">Valor total</th>
+          <th class="text-end">Ações</th>
+        </tr>
+      </thead>
+      <tbody id="quoteTableBody"></tbody>
+    </table>
+  </div>
+  <p class="small text-muted mt-2 mb-0">
+    <i class="bi bi-info-circle"></i> Clique em uma linha para visualizar o
+    orçamento completo.
+  </p>
 </section>

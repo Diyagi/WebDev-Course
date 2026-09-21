@@ -5,23 +5,36 @@
     <script>
       try {
         const theme = localStorage.getItem("saberti-theme");
-        if (theme === "light" || theme === "dark") document.documentElement.setAttribute("data-bs-theme", theme);
+        if (theme === "light" || theme === "dark")
+          document.documentElement.setAttribute("data-bs-theme", theme);
       } catch (_) {}
     </script>
     <script type="module" src="/assets/js/authGuard.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>SaberTI</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB"
+      crossorigin="anonymous"
+    />
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
     />
     <link rel="stylesheet" href="/assets/css/styles.css" />
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css"
+    />
   </head>
   <body class="app-body">
     <div class="app-shell" id="app-shell">
-      <aside id="app-sidebar" class="app-sidebar" aria-label="Navegação principal">
+      <aside
+        id="app-sidebar"
+        class="app-sidebar"
+        aria-label="Navegação principal"
+      >
         <div class="sidebar-brand">
           <span class="brand-mark" aria-hidden="true">ST</span>
           <span class="sidebar-label brand-name">SaberTI</span>
@@ -32,19 +45,35 @@
             <i class="fa-solid fa-receipt" aria-hidden="true"></i>
             <span class="sidebar-label">Orcamentos</span>
           </a>
-          <a class="sidebar-link nav-link" href="/menu/products" data-route="products">
+          <a
+            class="sidebar-link nav-link"
+            href="/menu/products"
+            data-route="products"
+          >
             <i class="fa-solid fa-box" aria-hidden="true"></i>
             <span class="sidebar-label">Produtos</span>
           </a>
-          <a class="sidebar-link nav-link" href="/menu/categories" data-route="categories">
+          <a
+            class="sidebar-link nav-link"
+            href="/menu/categories"
+            data-route="categories"
+          >
             <i class="fa-solid fa-tags" aria-hidden="true"></i>
             <span class="sidebar-label">Categorias</span>
           </a>
-          <a class="sidebar-link nav-link" href="/menu/clients" data-route="clients">
+          <a
+            class="sidebar-link nav-link"
+            href="/menu/clients"
+            data-route="clients"
+          >
             <i class="fa-solid fa-users" aria-hidden="true"></i>
             <span class="sidebar-label">Clientes</span>
           </a>
-          <a class="sidebar-link nav-link" href="/menu/users" data-route="users">
+          <a
+            class="sidebar-link nav-link d-none"
+            href="/menu/users"
+            data-route="users"
+          >
             <i class="fa-solid fa-user-gear" aria-hidden="true"></i>
             <span class="sidebar-label">Usuários</span>
           </a>
@@ -52,13 +81,25 @@
 
         <div class="sidebar-footer">
           <div class="sidebar-user" aria-label="Usuário conectado">
-            <span class="sidebar-user-avatar" id="sidebar-user-avatar" aria-hidden="true">U</span>
+            <span
+              class="sidebar-user-avatar"
+              id="sidebar-user-avatar"
+              aria-hidden="true"
+              >U</span
+            >
             <div class="sidebar-label sidebar-user-details">
-              <span class="sidebar-user-name" id="sidebar-user-name">Carregando...</span>
+              <span class="sidebar-user-name" id="sidebar-user-name"
+                >Carregando...</span
+              >
               <span class="sidebar-user-role" id="sidebar-user-role"></span>
             </div>
           </div>
-          <button class="sidebar-logout" id="logout-button" type="button" aria-label="Sair da conta">
+          <button
+            class="sidebar-logout"
+            id="logout-button"
+            type="button"
+            aria-label="Sair da conta"
+          >
             <i class="bi bi-box-arrow-right" aria-hidden="true"></i>
             <span class="sidebar-label">Sair</span>
           </button>
@@ -86,15 +127,28 @@
             aria-checked="false"
             aria-label="Ativar modo escuro"
           >
-            <i class="bi bi-sun-fill" id="theme-toggle-icon" aria-hidden="true"></i>
+            <i
+              class="bi bi-sun-fill"
+              id="theme-toggle-icon"
+              aria-hidden="true"
+            ></i>
           </button>
         </header>
 
-        <main class="app-view" id="viewContent" tabindex="-1" aria-live="polite"></main>
+        <main
+          class="app-view"
+          id="viewContent"
+          tabindex="-1"
+          aria-live="polite"
+        ></main>
       </div>
     </div>
 
     <script type="module" src="/assets/js/menu.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
+      crossorigin="anonymous"
+    ></script>
   </body>
 </html>

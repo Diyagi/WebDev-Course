@@ -1,38 +1,89 @@
-<div class="modal fade" id="productPickerModal" tabindex="-1" aria-labelledby="productPickerModalTitle" aria-hidden="true">
-    <div class="modal-dialog modal-xl modal-dialog-scrollable">
-        <div class="modal-content">
-            <div class="modal-header">
-                <div>
-                    <p class="view-kicker mb-1">Catálogo</p>
-                    <h2 class="modal-title fs-5" id="productPickerModalTitle">Selecionar produto</h2>
-                </div>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
-            </div>
-            <div class="modal-body">
-                <label class="form-label" for="productPickerSearch">Buscar produto</label>
-                <div class="input-group mb-3">
-                    <span class="input-group-text"><i class="bi bi-search" aria-hidden="true"></i></span>
-                    <input type="search" class="form-control" id="productPickerSearch" placeholder="Busque por ID, descrição ou categoria" autocomplete="off">
-                </div>
-                <p class="small text-muted">Pressione Enter para selecionar o primeiro resultado.</p>
-                <div class="table-responsive view-card product-picker-table">
-                    <table class="table table-hover align-middle">
-                        <thead>
-                            <tr>
-                                <th><button type="button" class="sort-button" data-sort="id">ID <i class="bi bi-arrow-down-up"></i></button></th>
-                                <th><button type="button" class="sort-button" data-sort="description">Descrição <i class="bi bi-arrow-down-up"></i></button></th>
-                                <th><button type="button" class="sort-button" data-sort="category">Categoria <i class="bi bi-arrow-down-up"></i></button></th>
-                                <th class="text-end"><button type="button" class="sort-button" data-sort="price">Preço <i class="bi bi-arrow-down-up"></i></button></th>
-                                <th class="text-end">Ação</th>
-                            </tr>
-                        </thead>
-                        <tbody id="productPickerTableBody"></tbody>
-                    </table>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-            </div>
+<div
+  class="modal fade"
+  id="productPickerModal"
+  tabindex="-1"
+  aria-labelledby="productPickerModalTitle"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-xl modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div>
+          <p class="view-kicker mb-1">Catálogo</p>
+          <h2 class="modal-title fs-5" id="productPickerModalTitle">
+            Selecionar produto
+          </h2>
         </div>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Fechar"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <label class="form-label" for="productPickerSearch"
+          >Buscar produto</label
+        >
+        <div class="input-group mb-3">
+          <span class="input-group-text"
+            ><i class="bi bi-search" aria-hidden="true"></i
+          ></span>
+          <input
+            type="search"
+            class="form-control"
+            id="productPickerSearch"
+            placeholder="Busque por ID, descrição ou categoria"
+            autocomplete="off"
+          />
+        </div>
+        <p class="small text-muted">
+          Pressione Enter para selecionar o primeiro resultado.
+        </p>
+        <div class="table-responsive view-card product-picker-table">
+          <table class="table table-hover align-middle">
+            <thead>
+              <tr>
+                <th>
+                  <button type="button" class="sort-button" data-sort="id">
+                    ID <i class="bi bi-arrow-down-up"></i>
+                  </button>
+                </th>
+                <th>
+                  <button
+                    type="button"
+                    class="sort-button"
+                    data-sort="description"
+                  >
+                    Descrição <i class="bi bi-arrow-down-up"></i>
+                  </button>
+                </th>
+                <th>
+                  <button
+                    type="button"
+                    class="sort-button"
+                    data-sort="category"
+                  >
+                    Categoria <i class="bi bi-arrow-down-up"></i>
+                  </button>
+                </th>
+                <th class="text-end">
+                  <button type="button" class="sort-button" data-sort="price">
+                    Preço <i class="bi bi-arrow-down-up"></i>
+                  </button>
+                </th>
+                <th class="text-end">Ação</th>
+              </tr>
+            </thead>
+            <tbody id="productPickerTableBody"></tbody>
+          </table>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+          Cancelar
+        </button>
+      </div>
     </div>
+  </div>
 </div>

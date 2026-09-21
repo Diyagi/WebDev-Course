@@ -1,7 +1,7 @@
 create table category (
     id              serial primary key,
     description     varchar(50) not null,
-)
+);
 
 create table product (
     id serial primary key,

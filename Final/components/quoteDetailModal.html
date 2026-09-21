@@ -1,23 +1,55 @@
-<div class="modal fade" id="quoteDetailModal" tabindex="-1" aria-labelledby="quoteDetailModalTitle" aria-hidden="true">
-    <div class="modal-dialog modal-xl modal-dialog-scrollable">
-        <div class="modal-content">
-            <div class="modal-header">
-                <div>
-                    <p class="view-kicker mb-1">Visualização completa</p>
-                    <h2 class="modal-title fs-5" id="quoteDetailModalTitle">Orçamento</h2>
-                </div>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
-            </div>
-            <div class="modal-body" id="quoteDetailModalBody"></div>
-            <div class="modal-footer">
-                <div id="quoteDetailFeedback" class="alert w-100 mb-2" role="status" hidden></div>
-                <button type="button" class="btn btn-warning" id="quoteDetailEditButton">
-                    <i class="bi bi-pencil"></i> Editar orçamento
-                </button>
-                <button type="button" class="btn btn-success" id="quoteDetailFinalizeButton">
-                    <i class="bi bi-check-lg"></i> Finalizar orçamento
-                </button>
-            </div>
+<div
+  class="modal fade"
+  id="quoteDetailModal"
+  tabindex="-1"
+  aria-labelledby="quoteDetailModalTitle"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-xl modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header">
+        <div>
+          <p class="view-kicker mb-1">Visualização completa</p>
+          <h2 class="modal-title fs-5" id="quoteDetailModalTitle">Orçamento</h2>
         </div>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Fechar"
+        ></button>
+      </div>
+      <div class="modal-body" id="quoteDetailModalBody"></div>
+      <div class="modal-footer">
+        <div
+          id="quoteDetailFeedback"
+          class="alert w-100 mb-2"
+          role="status"
+          hidden
+        ></div>
+        <a
+          class="btn btn-outline-primary"
+          id="quoteDetailPrintButton"
+          target="_blank"
+          rel="noopener"
+        >
+          <i class="bi bi-printer" aria-hidden="true"></i> Imprimir orçamento
+        </a>
+        <button
+          type="button"
+          class="btn btn-warning"
+          id="quoteDetailEditButton"
+        >
+          <i class="bi bi-pencil"></i> Editar orçamento
+        </button>
+        <button
+          type="button"
+          class="btn btn-success"
+          id="quoteDetailFinalizeButton"
+        >
+          <i class="bi bi-check-lg"></i> Finalizar orçamento
+        </button>
+      </div>
     </div>
+  </div>
 </div>

@@ -1,42 +1,42 @@
 Login:
-    - Email
-    - Senha
+  - Email
+  - Senha
 
 Usuarios:
-    - Nome*
-    - Email*
-    - Senha (Hash)*
+  - Nome*
+  - Email*
+  - Senha (Hash)*
 
 Clientes:
-    - Nome*
-    - CPF/CNPJ*
-    - Tipo (Fisica/Juridica)
-    - Telefone
-    - Email
+  - Nome*
+  - CPF/CNPJ*
+  - Tipo (Fisica/Juridica)
+  - Telefone
+  - Email
 
 Categorias:
-    - Descricao*
+  - Descricao*
 
 Produtos:
-    - Descricao*
-    - Valor*
-    - Categoria (FK)*
-    - Status*
-    - Observacao
-    - Data de Cadastro
+  - Descricao*
+  - Valor*
+  - Categoria (FK)*
+  - Status*
+  - Observacao
+  - Data de Cadastro
 
 Orcamentos:
-    - Cliente (FK)*
-    - Vendedor (FK)*
-    - Data Criacao
-    - Validade (Dias)*
-    - Data Finalizacao (Venda Finalizada)
-    - Valor Total
+  - Cliente (FK)*
+  - Vendedor (FK)*
+  - Data Criacao
+  - Validade (Dias)*
+  - Data Finalizacao (Venda Finalizada)
+  - Valor Total
 
 OrcamentosItems:
-    - Orcamento (FK)
-    - Produto (FK)
-    - Descricao
-    - Quantidade
-    - Valor Uni.
-    - Valor Total
+  - Orcamento (FK)
+  - Produto (FK)
+  - Descricao
+  - Quantidade
+  - Valor Uni.
+  - Valor Total

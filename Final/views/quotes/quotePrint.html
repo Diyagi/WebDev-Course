@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Imprimir orçamento — SaberTI</title>
+    <link rel="stylesheet" href="/assets/css/quotePrint.css" />
+    <script type="module" src="/assets/js/pages/quotes/quotePrint.js"></script>
+  </head>
+  <body>
+    <nav class="print-toolbar" aria-label="Ações de impressão">
+      <a href="/menu/quotes">Voltar aos orçamentos</a>
+      <button id="printQuote" type="button" disabled>
+        Imprimir / Salvar PDF
+      </button>
+    </nav>
+    <main class="print-sheet">
+      <header class="print-heading">
+        <strong>SaberTI</strong>
+        <h1 id="quoteTitle">Orçamento</h1>
+      </header>
+      <p id="printFeedback" role="status">Carregando orçamento...</p>
+      <div id="printContent"></div>
+    </main>
+  </body>
+</html>
