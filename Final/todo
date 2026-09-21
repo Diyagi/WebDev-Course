@@ -1,6 +1,2 @@
 Find a way to wait for modal hide before restoring button.
-Check for JWT token in login screen and skip if its valid.
-Add finalize quote button in the quote view.
-Center Action header in some of the tables.
-Add search feature for all tables.
 Add pagination.

@@ -2,34 +2,38 @@ import * as dbQuote from "../../soupabase/quote.js";
 import { showQuoteDetail } from "../../../../components/quoteDetailModal.js";
 import { confirmModal, showConfirmationError } from "../../../../components/confirmationModal.js";
 import { reloadCurrentView } from "../../router.js";
+import { bindListSearch } from "../../listSearch.js";
 
 let quotes = [];
 
 export async function init() {
     document.querySelector("#quoteTableBody").addEventListener("click", onTableClick);
     document.querySelector("#quoteTableBody").addEventListener("keydown", onTableKeydown);
-    document.querySelector("#showExpiredQuotes").addEventListener("change", renderQuotes);
-    document.querySelector("#showFinalizedQuotes").addEventListener("change", renderQuotes);
-    await loadQuotes();
+    quotes = [];
+    await bindListSearch({ inputId: "quoteSearch", tableBodyId: "quoteTableBody", columnCount: 8, load: loadQuotes,
+        filterIds: ["showExpiredQuotes", "showFinalizedQuotes"] });
 }
 
-async function loadQuotes() {
+async function loadQuotes(search, isCurrent, options) {
     const tableBody = document.querySelector("#quoteTableBody");
-    const { data, error } = await dbQuote.getQuotes();
-    if (error) {
-        console.error(error);
-        tableBody.innerHTML = '<tr><td colspan="8" class="text-center text-danger">Não foi possível carregar os orçamentos.</td></tr>';
-        return;
-    }
+    quotes = [];
+    const { data, error, nextCursor } = await dbQuote.getQuotes(search, {
+        ...options,
+        showExpired: document.querySelector("#showExpiredQuotes").checked,
+        showFinalized: document.querySelector("#showFinalizedQuotes").checked
+    });
+    if (!isCurrent()) return;
+    if (error) throw error;
     quotes = data ?? [];
+    tableBody.removeAttribute("aria-busy");
     renderQuotes();
+    return { nextCursor };
 }
 
 function renderQuotes() {
     const tableBody = document.querySelector("#quoteTableBody");
-    const showExpired = document.querySelector("#showExpiredQuotes").checked;
-    const showFinalized = document.querySelector("#showFinalizedQuotes").checked;
-    const visibleQuotes = quotes.filter((quote) => quote.finalized_at ? showFinalized : (!isExpired(quote) || showExpired));
+    if (tableBody.hasAttribute("aria-busy")) return;
+    const visibleQuotes = quotes;
 
     tableBody.innerHTML = "";
     if (!visibleQuotes.length) {
@@ -111,7 +115,15 @@ function onTableClick(event) {
 
 function openDetail(id) {
     const quote = quotes.find((item) => String(item.id) === String(id));
-    if (quote) showQuoteDetail(quote).catch(console.error);
+    const tableBody = document.querySelector("#quoteTableBody");
+    if (quote) showQuoteDetail(quote, {
+        onFinalized: (updatedQuote) => {
+            if (!tableBody.isConnected) return;
+            const currentQuote = quotes.find((item) => String(item.id) === String(updatedQuote.id));
+            if (currentQuote) currentQuote.finalized_at = updatedQuote.finalized_at;
+            document.querySelector("#quoteSearch").dispatchEvent(new Event("input"));
+        }
+    }).catch(console.error);
 }
 
 function deleteQuote(quote) {

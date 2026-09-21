@@ -1,27 +1,25 @@
 import * as dbProduct from "../../soupabase/product.js";
 import { confirmModal, showConfirmationError } from "../../../../components/confirmationModal.js";
 import { reloadCurrentView } from "../../router.js";
+import { bindListSearch } from "../../listSearch.js";
 
 export async function init() {
     document.querySelector("#productTableBody").addEventListener("click", onTableClick);
-    await loadProducts();
+    await bindListSearch({ inputId: "productSearch", tableBodyId: "productTableBody", columnCount: 8, load: loadProducts });
 }
 
-async function loadProducts() {
+async function loadProducts(search, isCurrent, options) {
     const tableBody = document.querySelector("#productTableBody");
-    const { data: products, error } = await dbProduct.getProducts();
+    const { data: products, error, nextCursor } = await dbProduct.getProducts(search, options);
+    if (!isCurrent()) return;
 
-    if (error) {
-        console.error(error);
-        tableBody.innerHTML = '<tr><td colspan="8" class="text-center text-danger">Não foi possível carregar os produtos.</td></tr>';
-        return;
-    }
+    if (error) { throw error; }
 
     tableBody.innerHTML = "";
 
     if (!products?.length) {
-        tableBody.innerHTML = '<tr><td colspan="8" class="text-center text-muted">Nenhum produto cadastrado.</td></tr>';
-        return;
+        tableBody.innerHTML = '<tr><td colspan="8" class="text-center text-muted">Nenhum produto encontrado.</td></tr>';
+        return { nextCursor };
     }
 
     products.forEach((product) => {
@@ -37,13 +35,17 @@ async function loadProducts() {
             <td><span class="badge ${status.active ? "text-bg-success" : "text-bg-danger"}"></span></td>
             <td></td>
             <td></td>
-            <td class="text-end">
-                <button class="btn btn-sm btn-warning edit-product" data-id="${product.id}" title="Editar" aria-label="Editar produto">
-                    <i class="bi bi-pencil"></i>
-                </button>
-                <button class="btn btn-sm btn-danger delete-product" data-id="${product.id}" title="Excluir" aria-label="Excluir produto">
-                    <i class="bi bi-trash"></i>
-                </button>
+            <td class="text-end text-nowrap">
+                <div class="dropdown table-actions">
+                    <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" data-bs-boundary="viewport" aria-expanded="false" aria-label="Ações do produto ${product.id}">
+                        Ações
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <li><button class="dropdown-item edit-product" type="button" data-id="${product.id}"><i class="bi bi-pencil me-2"></i>Editar</button></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><button class="dropdown-item text-danger delete-product" type="button" data-id="${product.id}"><i class="bi bi-trash me-2"></i>Excluir</button></li>
+                    </ul>
+                </div>
             </td>
         `;
 
@@ -56,6 +58,7 @@ async function loadProducts() {
         row.querySelector(".delete-product").dataset.name = product.description ?? "este produto";
         tableBody.appendChild(row);
     });
+    return { nextCursor };
 
 }
 

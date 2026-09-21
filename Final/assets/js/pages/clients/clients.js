@@ -1,27 +1,25 @@
 import * as dbClient from "../../soupabase/client.js";
 import { confirmModal, showConfirmationError } from "../../../../components/confirmationModal.js";
 import { reloadCurrentView } from "../../router.js";
+import { bindListSearch } from "../../listSearch.js";
 
 export async function init() {
     document.querySelector("#clientTableBody").addEventListener("click", onTableClick);
-    await loadClients();
+    await bindListSearch({ inputId: "clientSearch", tableBodyId: "clientTableBody", columnCount: 8, load: loadClients });
 }
 
-async function loadClients() {
+async function loadClients(search, isCurrent, options) {
     const tableBody = document.querySelector("#clientTableBody");
-    const { data: clients, error } = await dbClient.getClients();
+    const { data: clients, error, nextCursor } = await dbClient.getClients(search, options);
+    if (!isCurrent()) return;
 
-    if (error) {
-        console.error(error);
-        tableBody.innerHTML = '<tr><td colspan="7" class="text-center text-danger">Não foi possível carregar os clientes.</td></tr>';
-        return;
-    }
+    if (error) { throw error; }
 
     tableBody.innerHTML = "";
 
     if (!clients?.length) {
-        tableBody.innerHTML = '<tr><td colspan="7" class="text-center text-muted">Nenhum cliente cadastrado.</td></tr>';
-        return;
+        tableBody.innerHTML = '<tr><td colspan="8" class="text-center text-muted">Nenhum cliente encontrado.</td></tr>';
+        return { nextCursor };
     }
 
     clients.forEach((client) => {
@@ -35,13 +33,18 @@ async function loadClients() {
             <td><span class="badge text-bg-secondary"></span></td>
             <td></td>
             <td></td>
-            <td class="text-end">
-                <button class="btn btn-sm btn-warning edit-client" data-id="${client.id}" title="Editar" aria-label="Editar cliente">
-                    <i class="bi bi-pencil"></i>
-                </button>
-                <button class="btn btn-sm btn-danger delete-client" data-id="${client.id}" title="Excluir" aria-label="Excluir cliente">
-                    <i class="bi bi-trash"></i>
-                </button>
+            <td></td>
+            <td class="text-end text-nowrap">
+                <div class="dropdown table-actions">
+                    <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" data-bs-boundary="viewport" aria-expanded="false" aria-label="Ações do cliente ${client.id}">
+                        Ações
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <li><button class="dropdown-item edit-client" type="button" data-id="${client.id}"><i class="bi bi-pencil me-2"></i>Editar</button></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><button class="dropdown-item text-danger delete-client" type="button" data-id="${client.id}"><i class="bi bi-trash me-2"></i>Excluir</button></li>
+                    </ul>
+                </div>
             </td>
         `;
 
@@ -50,9 +53,11 @@ async function loadClients() {
         row.querySelector(".badge").textContent = formatClientType(client.clienttype);
         row.children[4].textContent = formatPhone(client.phone);
         row.children[5].textContent = client.email ?? "—";
+        row.children[6].textContent = client.delivery_address || "—";
         row.querySelector(".delete-client").dataset.name = name || "este cliente";
         tableBody.appendChild(row);
     });
+    return { nextCursor };
 }
 
 function onTableClick(event) {
@@ -77,7 +82,6 @@ function onTableClick(event) {
                 showConfirmationError(getDeleteErrorMessage(error));
                 return false;
             }
-
             await reloadCurrentView();
         }
     });

@@ -1,4 +1,6 @@
 import { supabase } from "./supaCliente.js";
+import { applySearch, textSearchFilter } from "./search.js";
+import { readPage } from "./pagination.js";
 
 const QUOTE_SELECT = `
     id,
@@ -22,11 +24,26 @@ const QUOTE_SELECT = `
     )
 `;
 
-export async function getQuotes() {
-    return await supabase
-        .from("quote")
-        .select(QUOTE_SELECT)
-        .order("created_at", { ascending: false });
+export async function getQuotes(search = "", options = {}) {
+    const term = search.trim();
+    const now = new Date();
+    return readPage(() => {
+        let query = supabase
+            .from("quote")
+            .select(QUOTE_SELECT + (term ? ",search_client:clientid(),search_seller:userid()" : ""));
+        if (!options.showFinalized) query = query.is("finalized_at", null);
+        if (term) {
+            query = query
+                .or(textSearchFilter(["name"], term), { referencedTable: "search_client" })
+                .or(textSearchFilter(["full_name", "username"], term), { referencedTable: "search_seller" });
+        }
+        return applySearch(query, term, [], ["search_client.not.is.null", "search_seller.not.is.null"]);
+    }, { ...options, sort: { key: "created_at", direction: "desc" } }, (quote) => {
+        if (quote.finalized_at || options.showExpired || !quote.created_at) return true;
+        const expiration = new Date(quote.created_at);
+        expiration.setDate(expiration.getDate() + Number(quote.validity_days || 0));
+        return !(expiration < now);
+    });
 }
 
 export async function getQuote(quoteId) {
@@ -34,6 +51,16 @@ export async function getQuote(quoteId) {
         .from("quote")
         .select(QUOTE_SELECT)
         .eq("id", quoteId)
+        .single();
+}
+
+export async function finalizeQuote(quoteId) {
+    return await supabase
+        .from("quote")
+        .update({ finalized_at: new Date().toISOString() })
+        .eq("id", quoteId)
+        .is("finalized_at", null)
+        .select("id, finalized_at")
         .single();
 }
 
@@ -129,11 +156,18 @@ export async function reopenExpiredQuote(quoteId) {
 
     const items = quote.product_quote ?? [];
     const productIds = [...new Set(items.map((item) => item.productid))];
-    const { data: products, error: productError } = productIds.length
-        ? await supabase.from("product").select("id, price").in("id", productIds)
-        : { data: [], error: null };
-
-    if (productError) return { data: null, error: productError };
+    const products = [];
+    // Repricing needs every referenced price, fetched in bounded keyset pages.
+    for (let start = 0; start < productIds.length; start += 100) {
+        const ids = productIds.slice(start, start + 100);
+        let cursor = null;
+        do {
+            const result = await readPage(() => supabase.from("product").select("id, price").in("id", ids), { cursor });
+            if (result.error) return { data: null, error: result.error };
+            products.push(...result.data);
+            cursor = result.nextCursor;
+        } while (cursor);
+    }
 
     const prices = new Map((products ?? []).map((product) => [String(product.id), Number(product.price)]));
     const unavailableProduct = productIds.find((productId) => !prices.has(String(productId)) || !Number.isFinite(prices.get(String(productId))));

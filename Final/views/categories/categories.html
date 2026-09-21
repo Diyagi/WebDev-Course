@@ -1,18 +1,19 @@
 <section class="view-page">
     <div class="view-toolbar">
-        <div>
-            <p class="view-kicker">Cadastros</p>
-            <h2 class="view-title">Categorias</h2>
-            <p class="view-subtitle">Organize os produtos por categoria.</p>
-        </div>
-
+        <p class="view-subtitle">Organize os produtos por categoria.</p>
         <button class="btn btn-primary" onclick="window.location.href='/menu/categories/add';">
             <i class="bi bi-plus-lg"></i>
             Nova Categoria
         </button>
     </div>
 
-    <div class="table-responsive view-card">
+    <div class="list-filters mb-3" role="search" aria-label="Filtros de categorias">
+        <div class="list-search">
+            <input id="categorySearch" type="search" class="form-control" placeholder="ID ou descrição" aria-controls="catTableBody">
+        </div>
+    </div>
+
+    <div class="table-responsive view-card table-actions-card">
         <table class="table table-striped table-hover align-middle">
             <thead>
                 <tr>

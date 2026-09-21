@@ -1,4 +1,8 @@
+import { bindPickerSearch } from "./pickerSearch.js";
+
 let componentPromise;
+let loadRemoteRecords;
+let disposeSearch;
 let records = [];
 let filteredRecords = [];
 let columns = [];
@@ -6,8 +10,10 @@ let onSelectRecord;
 let emptyMessage = "Nenhum registro encontrado.";
 let sort = { key: "", direction: "asc" };
 
-export async function openRecordPicker({ title, kicker = "Seleção", searchPlaceholder = "Buscar", availableRecords = [], tableColumns = [], initialSort, noResultsMessage, onSelect }) {
+export async function openRecordPicker({ title, kicker = "Seleção", searchPlaceholder = "Buscar", availableRecords = [], loadRecords, tableColumns = [], initialSort, noResultsMessage, onSelect }) {
     const modalElement = await ensureComponent();
+    disposeSearch?.();
+    loadRemoteRecords = loadRecords;
     records = availableRecords;
     columns = tableColumns;
     onSelectRecord = onSelect;
@@ -21,6 +27,19 @@ export async function openRecordPicker({ title, kicker = "Seleção", searchPlac
     search.value = "";
     renderHeader(modalElement);
     renderRecords(modalElement);
+
+    if (loadRemoteRecords) {
+        disposeSearch = bindPickerSearch({
+            modal: modalElement,
+            input: search,
+            body: modalElement.querySelector("#recordPickerTableBody"),
+            columnCount: columns.length + 1,
+            load: loadRemoteRecords,
+            getSort: () => sort,
+            onPending: () => { records = []; filteredRecords = []; },
+            onResults: (data) => { records = data; renderRecords(modalElement); }
+        });
+    }
 
     bootstrap.Modal.getOrCreateInstance(modalElement).show();
     modalElement.addEventListener("shown.bs.modal", () => search.focus(), { once: true });
@@ -39,7 +58,9 @@ async function ensureComponent() {
             .then((html) => {
                 document.body.insertAdjacentHTML("beforeend", html);
                 const modal = document.querySelector("#recordPickerModal");
-                modal.querySelector("#recordPickerSearch").addEventListener("input", () => renderRecords(modal));
+                modal.querySelector("#recordPickerSearch").addEventListener("input", () => {
+                    if (!loadRemoteRecords) renderRecords(modal);
+                });
                 modal.querySelector("#recordPickerSearch").addEventListener("keydown", onSearchKeydown);
                 modal.querySelector("#recordPickerTableHead").addEventListener("click", onSortClick);
                 modal.querySelector("#recordPickerTableBody").addEventListener("click", onRecordClick);
@@ -71,8 +92,9 @@ function renderHeader(modalElement) {
 }
 
 function renderRecords(modalElement) {
+    if (modalElement.querySelector("#recordPickerTableBody").hasAttribute("aria-busy")) return;
     const query = normalize(modalElement.querySelector("#recordPickerSearch").value);
-    filteredRecords = records
+    filteredRecords = loadRemoteRecords ? [...records] : records
         .filter((record) => normalize(columns.map((column) => getColumnValue(column, record)).join(" ")).includes(query))
         .sort(compareRecords);
 
@@ -129,7 +151,8 @@ function onSortClick(event) {
     sort = sort.key === button.dataset.sort
         ? { key: sort.key, direction: sort.direction === "asc" ? "desc" : "asc" }
         : { key: button.dataset.sort, direction: "asc" };
-    renderRecords(document.querySelector("#recordPickerModal"));
+    if (loadRemoteRecords) disposeSearch.reset();
+    else renderRecords(document.querySelector("#recordPickerModal"));
 }
 
 function onRecordClick(event) {

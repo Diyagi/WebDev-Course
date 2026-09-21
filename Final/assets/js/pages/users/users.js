@@ -35,13 +35,17 @@ async function loadUsers() {
             <td></td>
             <td></td>
             <td><span class="badge text-bg-secondary"></span></td>
-            <td class="text-end">
-                <button class="btn btn-sm btn-warning edit-user" data-id="${user.id}" title="Editar" aria-label="Editar usuário">
-                    <i class="bi bi-pencil"></i>
-                </button>
-                <button class="btn btn-sm btn-danger delete-user" data-id="${user.id}" title="Excluir" aria-label="Excluir usuário">
-                    <i class="bi bi-trash"></i>
-                </button>
+            <td class="text-end text-nowrap">
+                <div class="dropdown table-actions">
+                    <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" data-bs-boundary="viewport" aria-expanded="false" aria-label="Ações do usuário ${user.id}">
+                        Ações
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <li><button class="dropdown-item edit-user" type="button" data-id="${user.id}"><i class="bi bi-pencil me-2"></i>Editar</button></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><button class="dropdown-item text-danger delete-user" type="button" data-id="${user.id}"><i class="bi bi-trash me-2"></i>Excluir</button></li>
+                    </ul>
+                </div>
             </td>
         `;
 

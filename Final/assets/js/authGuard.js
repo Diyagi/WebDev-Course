@@ -8,7 +8,10 @@ const {
 if (error || !user) {
     console.log("Not logged in")
 	window.location.href = "/login";
+} else if (window.location.pathname.includes("/login")) {
+	window.location.href = "/menu";
 }
+
 
 
 console.log("Logged in user:", user.email);

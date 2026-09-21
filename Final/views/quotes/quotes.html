@@ -1,16 +1,15 @@
 <section class="view-page quote-page">
     <div class="view-toolbar">
-        <div>
-            <p class="view-kicker">Vendas</p>
-            <h2 class="view-title">Orçamentos</h2>
-            <p class="view-subtitle">Consulte propostas e abra um orçamento para ver todos os produtos.</p>
-        </div>
+        <p class="view-subtitle">Consulte propostas e abra um orçamento para ver todos os produtos.</p>
         <button class="btn btn-primary" onclick="window.location.href='/menu/quotes/add';">
             <i class="bi bi-plus-lg"></i> Novo Orçamento
         </button>
     </div>
 
-    <div class="quote-filters mb-3" aria-label="Filtros de orçamento">
+    <div class="quote-filters list-filters mb-3" role="search" aria-label="Filtros de orçamento">
+        <div class="list-search">
+            <input id="quoteSearch" type="search" class="form-control" placeholder="ID, nome do cliente ou vendedor" aria-controls="quoteTableBody">
+        </div>
         <div class="form-check form-switch">
             <input class="form-check-input" type="checkbox" role="switch" id="showExpiredQuotes">
             <label class="form-check-label" for="showExpiredQuotes">Mostrar vencidos</label>

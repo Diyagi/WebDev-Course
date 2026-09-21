@@ -1,12 +1,14 @@
 import * as dbCategory from "../../soupabase/category.js";
 import * as dbProduct from "../../soupabase/product.js";
 import * as formFeedback from "../../../../components/formFeedback.js";
+import { openRecordPicker } from "../../../../components/recordPickerModal.js";
 
 let editMode = false;
 let productData;
 let form;
 let descriptionInput;
 let categorySelect;
+let categoryPicker;
 let priceInput;
 let statusSelect;
 let observationInput;
@@ -17,6 +19,7 @@ export async function init() {
     form = document.querySelector("#productForm");
     descriptionInput = document.querySelector("#productDescription");
     categorySelect = document.querySelector("#productCategory");
+    categoryPicker = document.querySelector("#productCategoryPicker");
     priceInput = document.querySelector("#productPrice");
     statusSelect = document.querySelector("#productStatus");
     observationInput = document.querySelector("#productObservation");
@@ -24,10 +27,9 @@ export async function init() {
 
     form.addEventListener("submit", onSubmit);
     descriptionInput.addEventListener("input", () => validateField(checkDescription));
-    categorySelect.addEventListener("change", () => validateField(checkCategory));
+    categoryPicker.addEventListener("click", showCategoryPicker);
     priceInput.addEventListener("input", onPriceInput);
     statusSelect.addEventListener("change", () => validateField(checkStatus));
-    await populateCategories();
 
     if (editMode) {
         await loadProduct();
@@ -39,22 +41,28 @@ export async function init() {
     await validateForm();
 }
 
-async function populateCategories() {
-    const { data: categories, error } = await dbCategory.getCategories();
-    if (error) {
+function showCategoryPicker() {
+    openRecordPicker({
+        title: "Selecionar categoria",
+        kicker: "Categorias",
+        searchPlaceholder: "Busque por ID ou descrição",
+        loadRecords: (search, options) => dbCategory.getCategories(search, options),
+        initialSort: { key: "description", direction: "asc" },
+        noResultsMessage: "Nenhuma categoria encontrada.",
+        tableColumns: [
+            { key: "id", label: "ID", numeric: true },
+            { key: "description", label: "Descrição" }
+        ],
+        onSelect: (category) => { setCategory(category); validateField(checkCategory); }
+    }).catch((error) => {
         console.error(error);
-        categorySelect.innerHTML = '<option value="">Não foi possível carregar as categorias</option>';
-        categorySelect.disabled = true;
-        return;
-    }
-
-    categorySelect.innerHTML = '<option value="" selected disabled>Selecione uma categoria</option>';
-    categories.forEach((category) => {
-        const option = document.createElement("option");
-        option.value = category.id;
-        option.textContent = category.description;
-        categorySelect.appendChild(option);
+        formFeedback.showMessage("danger", "Não foi possível abrir o seletor de categorias.");
     });
+}
+
+function setCategory(category) {
+    categorySelect.value = category.id;
+    document.querySelector("#productCategoryLabel").textContent = category.description || `Categoria #${category.id}`;
 }
 
 async function loadProduct() {
@@ -76,7 +84,7 @@ async function loadProduct() {
     productData = data;
     document.querySelector("#productId").textContent = `ID do Produto: ${data.id}`;
     descriptionInput.value = data.description ?? "";
-    categorySelect.value = data.categoryid;
+    setCategory({ id: data.categoryid, description: data.category?.description });
     setPriceValue(data.price);
     statusSelect.value = data.status;
     observationInput.value = data.observation ?? "";
@@ -185,14 +193,14 @@ function checkDescription(showErrors) {
 }
 
 function checkCategory(showErrors) {
-    formFeedback.clearValidation(categorySelect);
+    formFeedback.clearValidation(categoryPicker);
 
     if (categorySelect.disabled || !categorySelect.value) {
-        if (showErrors) formFeedback.setInvalid(categorySelect, "Selecione uma categoria.");
+        if (showErrors) formFeedback.setInvalid(categoryPicker, "Selecione uma categoria.");
         return false;
     }
 
-    formFeedback.setValid(categorySelect);
+    formFeedback.setValid(categoryPicker);
     return true;
 }
 

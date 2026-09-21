@@ -9,6 +9,7 @@ let typeSelect;
 let documentInput;
 let phoneInput;
 let emailInput;
+let addressInput;
 let submitButton;
 
 export async function init() {
@@ -19,6 +20,7 @@ export async function init() {
     documentInput = document.querySelector("#clientDocument");
     phoneInput = document.querySelector("#clientPhone");
     emailInput = document.querySelector("#clientEmail");
+    addressInput = document.querySelector("#clientAddress");
     submitButton = form.querySelector('button[type="submit"]');
 
     form.addEventListener("submit", onSubmit);
@@ -68,6 +70,7 @@ async function loadClient() {
     documentInput.value = data.cpf_cnpj ?? "";
     phoneInput.value = data.phone ?? "";
     emailInput.value = data.email ?? "";
+    addressInput.value = data.delivery_address ?? "";
     formatDocumentInput();
     formatPhoneInput();
 }
@@ -84,7 +87,8 @@ async function onSubmit(event) {
         clienttype: typeSelect.value,
         cpf_cnpj: getDigits(documentInput),
         phone: getDigits(phoneInput) || null,
-        email: emailInput.value.trim() || null
+        email: emailInput.value.trim() || null,
+        delivery_address: addressInput.value.trim() || null
     };
     const buttonContent = submitButton.innerHTML;
     submitButton.disabled = true;

@@ -8,9 +8,7 @@ import { openRecordPicker } from "../../../../components/recordPickerModal.js";
 
 let editMode = false;
 let quoteData;
-let clients = [];
 let sellers = [];
-let products = [];
 let items = [];
 let loggedUser;
 let form;
@@ -26,9 +24,7 @@ let submitButton;
 export async function init() {
     editMode = window.location.pathname.includes("quotes/edit");
     quoteData = undefined;
-    clients = [];
     sellers = [];
-    products = [];
     items = [];
     loggedUser = undefined;
     form = document.querySelector("#quoteForm");
@@ -50,7 +46,7 @@ export async function init() {
     itemsBody.addEventListener("click", onItemsClick);
     document.querySelector("#addQuoteProduct").addEventListener("click", showProductPicker);
 
-    await Promise.all([loadClients(), loadSellers(), loadProducts()]);
+    await loadSellers();
     if (editMode) await loadQuote();
     else renderItems();
     updateFinalizedHelp();
@@ -59,17 +55,6 @@ export async function init() {
         ? '<i class="bi bi-check-lg"></i> Salvar Alterações'
         : '<i class="bi bi-check-lg"></i> Criar Orçamento';
     validateForm();
-}
-
-async function loadClients() {
-    const { data, error } = await dbClient.getClients();
-    if (error) {
-        console.error(error);
-        document.querySelector("#quoteClientLabel").textContent = "Não foi possível carregar os clientes";
-        clientPicker.disabled = true;
-        return;
-    }
-    clients = data ?? [];
 }
 
 async function loadSellers() {
@@ -95,17 +80,6 @@ async function loadSellers() {
     }
 }
 
-async function loadProducts() {
-    const { data, error } = await dbProduct.getProducts();
-    if (error) {
-        console.error(error);
-        formFeedback.showMessage("danger", "Não foi possível carregar o catálogo de produtos.");
-        document.querySelector("#addQuoteProduct").disabled = true;
-        return;
-    }
-    products = (data ?? []).filter((product) => ["active", "ativo"].includes(String(product.status).toLowerCase()));
-}
-
 async function loadQuote() {
     const quoteId = new URLSearchParams(window.location.search).get("quoteId");
     if (!quoteId) return disableForm("Orçamento não encontrado.");
@@ -118,9 +92,7 @@ async function loadQuote() {
 
     quoteData = data;
     document.querySelector("#quoteId").textContent = `ID do Orçamento: ${data.id}`;
-    const selectedClient = clients.find((client) => String(client.id) === String(data.clientid))
-        || { ...data.client, id: data.clientid, name: data.client?.name || `Cliente #${data.clientid}` };
-    if (!clients.some((client) => String(client.id) === String(selectedClient.id))) clients.push(selectedClient);
+    const selectedClient = { ...data.client, id: data.clientid, name: data.client?.name || `Cliente #${data.clientid}` };
     setClient(selectedClient);
 
     const selectedSeller = sellers.find((seller) => String(seller.id) === String(data.userid))
@@ -149,13 +121,13 @@ function showClientPicker() {
         title: "Selecionar cliente",
         kicker: "Clientes",
         searchPlaceholder: "Busque por ID, nome, CPF/CNPJ, telefone ou email",
-        availableRecords: clients,
+        loadRecords: (search, options) => dbClient.getClients(search, options),
         initialSort: { key: "name", direction: "asc" },
         noResultsMessage: "Nenhum cliente encontrado.",
         tableColumns: [
             { key: "id", label: "ID", numeric: true },
             { key: "name", label: "Nome" },
-            { key: "document", label: "CPF/CNPJ", value: (client) => formatDocument(client.cpf_cnpj) },
+            { key: "cpf_cnpj", label: "CPF/CNPJ", value: (client) => formatDocument(client.cpf_cnpj) },
             { key: "phone", label: "Telefone", value: (client) => formatPhone(client.phone) },
             { key: "email", label: "Email", value: (client) => client.email || "—" }
         ],
@@ -195,7 +167,9 @@ function showPickerError(error) {
 function showProductPicker() {
     const selectedIds = new Set(items.map((item) => String(item.productid)));
     openProductPicker({
-        availableProducts: products.filter((product) => !selectedIds.has(String(product.id))),
+        loadProducts: (search, options) => dbProduct.getProducts(search, {
+            ...options, activeOnly: true, excludeIds: [...selectedIds]
+        }),
         onSelect: addProduct
     }).catch((error) => {
         console.error(error);

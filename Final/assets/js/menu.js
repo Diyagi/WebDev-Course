@@ -1,5 +1,8 @@
 import { initRouter } from "./router.js";
+import { initResponsiveTables } from "./responsiveTables.js";
 import * as dbUser from "./soupabase/user.js";
+
+initResponsiveTables();
 
 const appShell = document.querySelector("#app-shell");
 const sidebarTrigger = document.querySelector("#sidebar-trigger");

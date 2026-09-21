@@ -12,8 +12,11 @@
         </div>
 
         <div class="mb-3">
-            <label for="productCategory" class="form-label">Categoria</label>
-            <select class="form-select" id="productCategory" required></select>
+            <label for="productCategoryPicker" class="form-label">Categoria</label>
+            <input type="hidden" id="productCategory">
+            <button type="button" class="form-select text-start" id="productCategoryPicker" aria-haspopup="dialog">
+                <span id="productCategoryLabel">Selecione uma categoria</span>
+            </button>
         </div>
 
         <div class="mb-3">

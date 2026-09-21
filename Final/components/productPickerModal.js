@@ -1,18 +1,32 @@
+import { bindPickerSearch } from "./pickerSearch.js";
+
 let componentPromise;
+let disposeSearch;
 let products = [];
 let filteredProducts = [];
 let onSelectProduct;
 let sort = { key: "description", direction: "asc" };
 
-export async function openProductPicker({ availableProducts = [], onSelect }) {
+export async function openProductPicker({ loadProducts, onSelect }) {
     const modalElement = await ensureComponent();
-    products = availableProducts;
+    disposeSearch?.();
+    products = [];
     onSelectProduct = onSelect;
     sort = { key: "description", direction: "asc" };
 
     const search = modalElement.querySelector("#productPickerSearch");
     search.value = "";
     renderProducts(modalElement);
+    disposeSearch = bindPickerSearch({
+        modal: modalElement,
+        input: search,
+        body: modalElement.querySelector("#productPickerTableBody"),
+        columnCount: 5,
+        load: loadProducts,
+        getSort: () => sort,
+        onPending: () => { products = []; filteredProducts = []; },
+        onResults: (data) => { products = data; renderProducts(modalElement); }
+    });
 
     const modal = bootstrap.Modal.getOrCreateInstance(modalElement);
     modal.show();
@@ -32,7 +46,6 @@ async function ensureComponent() {
             .then((html) => {
                 document.body.insertAdjacentHTML("beforeend", html);
                 const modal = document.querySelector("#productPickerModal");
-                modal.querySelector("#productPickerSearch").addEventListener("input", () => renderProducts(modal));
                 modal.querySelector("#productPickerSearch").addEventListener("keydown", onSearchKeydown);
                 modal.querySelector("thead").addEventListener("click", onSortClick);
                 modal.querySelector("#productPickerTableBody").addEventListener("click", onProductClick);
@@ -44,13 +57,8 @@ async function ensureComponent() {
 }
 
 function renderProducts(modalElement) {
-    const query = normalize(modalElement.querySelector("#productPickerSearch").value);
-    filteredProducts = products
-        .filter((product) => {
-            const category = product.category?.description ?? "";
-            return normalize(`${product.id} ${product.description ?? ""} ${category}`).includes(query);
-        })
-        .sort(compareProducts);
+    if (modalElement.querySelector("#productPickerTableBody").hasAttribute("aria-busy")) return;
+    filteredProducts = [...products];
 
     modalElement.querySelectorAll(".sort-button").forEach((button) => {
         const active = button.dataset.sort === sort.key;
@@ -93,7 +101,7 @@ function onSortClick(event) {
     sort = sort.key === button.dataset.sort
         ? { key: sort.key, direction: sort.direction === "asc" ? "desc" : "asc" }
         : { key: button.dataset.sort, direction: "asc" };
-    renderProducts(document.querySelector("#productPickerModal"));
+    disposeSearch.reset();
 }
 
 function onProductClick(event) {
@@ -106,24 +114,6 @@ function selectProduct(product) {
     if (!product) return;
     onSelectProduct?.(product);
     bootstrap.Modal.getInstance(document.querySelector("#productPickerModal"))?.hide();
-}
-
-function compareProducts(left, right) {
-    const direction = sort.direction === "asc" ? 1 : -1;
-    const getValue = (product) => sort.key === "category"
-        ? product.category?.description ?? ""
-        : product[sort.key];
-    const leftValue = getValue(left);
-    const rightValue = getValue(right);
-
-    if (sort.key === "id" || sort.key === "price") {
-        return (Number(leftValue) - Number(rightValue)) * direction;
-    }
-    return String(leftValue ?? "").localeCompare(String(rightValue ?? ""), "pt-BR", { sensitivity: "base" }) * direction;
-}
-
-function normalize(value) {
-    return String(value ?? "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().trim();
 }
 
 function formatCurrency(value) {

@@ -1,17 +1,19 @@
 <section class="view-page">
     <div class="view-toolbar">
-        <div>
-            <p class="view-kicker">Cadastros</p>
-            <h2 class="view-title">Produtos</h2>
-            <p class="view-subtitle">Gerencie o catálogo e a disponibilidade.</p>
-        </div>
+        <p class="view-subtitle">Gerencie o catálogo e a disponibilidade.</p>
         <button class="btn btn-primary" onclick="window.location.href='/menu/products/add';">
             <i class="bi bi-plus-lg"></i>
             Novo Produto
         </button>
     </div>
 
-    <div class="table-responsive view-card">
+    <div class="list-filters mb-3" role="search" aria-label="Filtros de produtos">
+        <div class="list-search">
+            <input id="productSearch" type="search" class="form-control" placeholder="ID, descrição, categoria ou observação" aria-controls="productTableBody">
+        </div>
+    </div>
+
+    <div class="table-responsive view-card table-actions-card">
         <table class="table table-striped table-hover align-middle">
             <thead>
                 <tr>

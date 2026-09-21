@@ -1,27 +1,25 @@
 import * as dbCategory from "../../soupabase/category.js";
 import { confirmModal, showConfirmationError } from "../../../../components/confirmationModal.js";
 import { reloadCurrentView } from "../../router.js";
+import { bindListSearch } from "../../listSearch.js";
 
 export async function init() {
     document.querySelector("#catTableBody").addEventListener("click", onTableClick);
-    await loadCategories();
+    await bindListSearch({ inputId: "categorySearch", tableBodyId: "catTableBody", columnCount: 3, load: loadCategories });
 }
 
-async function loadCategories() {
+async function loadCategories(search, isCurrent, options) {
     const tableBody = document.querySelector("#catTableBody");
-    const { data: categories, error } = await dbCategory.getCategories();
+    const { data: categories, error, nextCursor } = await dbCategory.getCategories(search, options);
+    if (!isCurrent()) return;
 
-    if (error) {
-        console.error(error);
-        tableBody.innerHTML = '<tr><td colspan="3" class="text-center text-danger">Não foi possível carregar as categorias.</td></tr>';
-        return;
-    }
+    if (error) { throw error; }
 
     tableBody.innerHTML = "";
 
     if (!categories?.length) {
-        tableBody.innerHTML = '<tr><td colspan="3" class="text-center text-muted">Nenhuma categoria cadastrada.</td></tr>';
-        return;
+        tableBody.innerHTML = '<tr><td colspan="3" class="text-center text-muted">Nenhuma categoria encontrada.</td></tr>';
+        return { nextCursor };
     }
 
     categories.forEach((category) => {
@@ -32,13 +30,17 @@ async function loadCategories() {
         row.innerHTML = `
             <td>${categoryId}</td>
             <td></td>
-            <td class="text-end">
-                <button class="btn btn-sm btn-warning edit-category" data-id="${categoryId}" title="Editar" aria-label="Editar categoria">
-                    <i class="bi bi-pencil"></i>
-                </button>
-                <button class="btn btn-sm btn-danger delete-category" data-id="${categoryId}" title="Excluir" aria-label="Excluir categoria">
-                    <i class="bi bi-trash"></i>
-                </button>
+            <td class="text-end text-nowrap">
+                <div class="dropdown table-actions">
+                    <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" data-bs-boundary="viewport" aria-expanded="false" aria-label="Ações da categoria ${categoryId}">
+                        Ações
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <li><button class="dropdown-item edit-category" type="button" data-id="${categoryId}"><i class="bi bi-pencil me-2"></i>Editar</button></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><button class="dropdown-item text-danger delete-category" type="button" data-id="${categoryId}"><i class="bi bi-trash me-2"></i>Excluir</button></li>
+                    </ul>
+                </div>
             </td>
         `;
 
@@ -46,6 +48,7 @@ async function loadCategories() {
         row.querySelector(".delete-category").dataset.name = description || "esta categoria";
         tableBody.appendChild(row);
     });
+    return { nextCursor };
 }
 
 function onTableClick(event) {
@@ -70,7 +73,6 @@ function onTableClick(event) {
                 showConfirmationError(getDeleteErrorMessage(error));
                 return false;
             }
-
             await reloadCurrentView();
         }
     });
